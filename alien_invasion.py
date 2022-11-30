@@ -8,7 +8,7 @@ class AlienInvasion:
         """ Overall class to manage game assets and behavior """
         pygame.init()
 
-        # makes the screen(called a "surface" in pygame) of the game 1200px wide by 800px high
+        # Creates an instance of settings and assign it to self.settings
         self.settings = Settings()
 
         self.screen = pygame.display.set_mode(
@@ -31,6 +31,7 @@ class AlienInvasion:
                     sys.exit()
 
                 # Redraw the screen during each pass through the loop
+                # Fills screen with background color
                 self.screen.fill(self.settings.bg_color)
 
                 # Make the most recently drawn screen visible
