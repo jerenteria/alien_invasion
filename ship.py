@@ -9,6 +9,7 @@ class Ship:
         """Initialize the ship and set its starting position"""
         # Assign screen to an attribute of Ship to access it easily in all the methods in this class
         self.screen = ai_game.screen
+        self.settings = ai_game.settings
         # Access the screens rect(rectangle) attribute using the get_rect() method and assign it to self.screen_rect
             # this allows us to place the ship in the correct location on the screen 
         self.screen_rect = ai_game.screen.get_rect()
@@ -22,6 +23,26 @@ class Ship:
 
         # Start each new ship at the bottom of center of the screen
         self.rect.midbottom = self.screen_rect.midbottom
+
+        # Store a decimal value for the ships horizontal position
+        self.x = float(self.rect.x)
+
+        # Set the moving right to False by default because we dont want to start the game moving to the right
+            # Movement Flag
+        self.moving_right = False
+        self.moving_left = False
+    
+    def update(self):
+        """Update the ship's position based on the movement flag"""
+        # If the flag is true move the ship to the right 
+        if self.moving_right:
+            self.x += self.settings.ship_speed
+        # use if instead of elif b/c elif would give right arrow priority when user is switching arrows keys
+        if self.moving_left:
+            self.x -= self.settings.ship_speed
+        
+        # Update rect object from self.x 
+        self.rect.x = self.x
 
     def blitme(self):
         """Draw the ship at its current location"""
