@@ -25,6 +25,7 @@ class Ship:
         self.rect.midbottom = self.screen_rect.midbottom
 
         # Store a decimal value for the ships horizontal position
+        # Store the decimal value here because a rect will only keep the integer portion of the value
         self.x = float(self.rect.x)
 
         # Set the moving right to False by default because we dont want to start the game moving to the right
@@ -34,11 +35,14 @@ class Ship:
     
     def update(self):
         """Update the ship's position based on the movement flag"""
-        # If the flag is true move the ship to the right 
-        if self.moving_right:
+        # Checks position of the ship before changing the value of self.x
+        # self.rect.right returns x coordinate of the right edge of the ship's rect if this val is less than the val returned by
+        # self.screen_rect.right, the ship has not reached the left side of the screen
+        if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.ship_speed
-        # use if instead of elif b/c elif would give right arrow priority when user is switching arrows keys
-        if self.moving_left:
+        # Use if instead of elif b/c elif would give right arrow priority when user is switching arrows keys
+        # Ensures ship is within bounds these bounds before before adjusting the value of self.x 
+        if self.moving_left and self.rect.left > 0:
             self.x -= self.settings.ship_speed
         
         # Update rect object from self.x 
