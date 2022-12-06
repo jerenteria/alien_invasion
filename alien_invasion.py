@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     # constructor class
@@ -23,6 +24,9 @@ class AlienInvasion:
         # We assign this ship instance to self.ship 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
         # set background color
         self.bg_color = (230, 230, 230)
@@ -34,22 +38,10 @@ class AlienInvasion:
             # watch for keyboard and mouse events 
             # pygame.event.get() returns list of events that has taken place since function was last called
             self._check_events()
-            # Happens after we check for events and before the screen updates so the screen updates with the players movement
-            self.ship.update()
-            # When you call update() on a group, the group automatically calls update() for each Sprite in the group
-            # self.bullets.update() calls bullet.update() for each bullet we place in the group bullets
-            self.bullets.update()
-            # Get rid of bullets that have dissapeared
-            # Copy() allows us to modidfy bullets inside the loop since we cannot remove items in a list/group within a for loop
-            # By looping over a copy of the group
-            for bullet in self.bullets.copy():
-                # Check each bullet if its dissapeared at the top of screen
-                if bullet.rect.bottom <= 0:
-                    # If bullet disppeared remove it
-                    self.bullets.remove(bullet)
             # Print how many bullets are still in the game and verify that bullets are being deleted
             # comment out the print statement because it takes up a lot of time and will slow down game over time
             # print(len(self.bullets))
+            self._update_bullets()
             self._update_screen()
 
     def _check_events(self):
@@ -86,10 +78,36 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group"""
-        # Create an instance of Bullet called new_bullet
-        new_bullet = Bullet(self)
-        # .add() works like append() but written specifically for pygame; adds new bullet
-        self.bullets.add(new_bullet)
+        # If there are less than bullets allowed create a new bullet but if 3 bullets are already active nothing happens when pressing space
+        # This allows the player to only shoot bullets in groups of 3
+        if len(self.bullets) < self.settings.bullets_allowed:
+            # Create an instance of Bullet called new_bullet
+            new_bullet = Bullet(self)
+            # .add() works like append() but written specifically for pygame; adds new bullet
+            self.bullets.add(new_bullet)
+
+    def _update_bullets(self):
+        """Update position of bullets and get rid of old bullets"""
+        # Happens after we check for events and before the screen updates so the screen updates with the players movement
+        self.ship.update()
+        # When you call update() on a group, the group automatically calls update() for each Sprite in the group
+        # self.bullets.update() calls bullet.update() for each bullet we place in the group bullets
+        self.bullets.update()
+        # Get rid of bullets that have dissapeared
+        # Copy() allows us to modidfy bullets inside the loop since we cannot remove items in a list/group within a for loop
+        # By looping over a copy of the group
+        for bullet in self.bullets.copy():
+            # Check each bullet if its dissapeared at the top of screen
+            if bullet.rect.bottom <= 0:
+                # If bullet disppeared remove it
+                self.bullets.remove(bullet)
+
+
+    def _create_fleet(self):
+        """Create the fleet of aliens"""
+        # Make an alien
+        alien = Alien(self)
+        self.aliens.add(alien)
 
     def _update_screen(self):
         # The surface(part of the screen where a game element can be displayed)
@@ -104,11 +122,16 @@ class AlienInvasion:
         # To draw bullets on screen we loop through the sprites in bullets and call draw_bullet() on each one 
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+
+        # when you call draw() on a group pygame draws each element in the group position defined by its rect attribute
+        # draw() requires one argument: a surface to draw elements
+        self.aliens.draw(self.screen)
         # Make the most recently drawn screen visible
         # pygame.display.flip() continually updates display to show the new positions of game elements and hides the old ones
         # creating the illusion of smooth movements 
         pygame.display.flip()
     
+
 
 if __name__ == '__main__':
     # Make a game instance, and run the game
