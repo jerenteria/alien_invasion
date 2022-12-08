@@ -42,6 +42,7 @@ class AlienInvasion:
             # comment out the print statement because it takes up a lot of time and will slow down game over time
             # print(len(self.bullets))
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
 
     def _check_events(self):
@@ -102,6 +103,10 @@ class AlienInvasion:
                 # If bullet disppeared remove it
                 self.bullets.remove(bullet)
 
+
+    def _update_aliens(self):
+        """Update  the positions of all aliens in the fleet"""
+        self.aliens.update()
 
     def _create_fleet(self):
         """Create the fleet of aliens"""
