@@ -40,5 +40,5 @@ class Alien(Sprite):
         self.x += self.settings.alien_speed
         # Use the val of self.x to update the position of the aliens rect
         self.rect.x = self.x
-
+    
 
