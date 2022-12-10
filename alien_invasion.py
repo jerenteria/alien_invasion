@@ -105,7 +105,8 @@ class AlienInvasion:
 
 
     def _update_aliens(self):
-        """Update  the positions of all aliens in the fleet"""
+        """Check if the fleet is at an edge then update the positions if all aliens in the fleet"""
+        self._check_fleet_edges()
         self.aliens.update()
 
     def _create_fleet(self):
@@ -146,6 +147,25 @@ class AlienInvasion:
         alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
         self.aliens.add(alien)
 
+    def _check_fleet_edges(self):
+        """Respond appropriately if any aliens have reached edge"""
+        # Loop through the fleet and call check_edges
+        for alien in self.aliens.sprites():
+            # If check_edges() returns True, we know an alien is at an edge and the whole fleet needs to change direction
+            if alien.check_edges():
+                # Call _change_fleet_direction()
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Drop the entire fleet and change the fleet's direction"""
+        # Loop through all the aliens
+        for alien in self.aliens.sprites():
+            # Drop each alien using fleet_drop_speed
+            alien.rect.y += self.settings.fleet_drop_speed
+            # Change the value of fleet_direction by multiplying is current val by -1. The line that changes the fleets direction
+            # isn't part of the for loop, we want to change each alien's vertical position, but change fleet's direction only once
+        self.settings.fleet_direction *= -1
     def _update_screen(self):
         # The surface(part of the screen where a game element can be displayed)
         # Each element in the game(ship/alien) is its own surface
