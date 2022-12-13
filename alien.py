@@ -36,8 +36,6 @@ class Alien(Sprite):
         # If fleet_direction = 1 val of alien_speed will be added to aliens current position, moving to the right; if fleet val
         # is -1, the val will be subtracted from aliens position, moving alien to the left
         self.x += (self.settings.alien_speed * self.settings.fleet_direction)
-        # Set the speed to alien_speed in alien settings
-        self.x += self.settings.alien_speed
         # Use the val of self.x to update the position of the aliens rect
         self.rect.x = self.x
     

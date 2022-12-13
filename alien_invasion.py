@@ -102,6 +102,9 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 # If bullet disppeared remove it
                 self.bullets.remove(bullet)
+        # Check for any bullets that have hit aliens
+        # If so, get rid of the bullet and the alien
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
 
     def _update_aliens(self):
@@ -166,6 +169,8 @@ class AlienInvasion:
             # Change the value of fleet_direction by multiplying is current val by -1. The line that changes the fleets direction
             # isn't part of the for loop, we want to change each alien's vertical position, but change fleet's direction only once
         self.settings.fleet_direction *= -1
+
+
     def _update_screen(self):
         # The surface(part of the screen where a game element can be displayed)
         # Each element in the game(ship/alien) is its own surface
