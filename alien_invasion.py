@@ -4,6 +4,8 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from time import sleep
+from game_stats import GameStats
 
 class AlienInvasion:
     # constructor class
@@ -18,6 +20,9 @@ class AlienInvasion:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
+
+        # Create an instance to store game statistics 
+        self.stats = GameStats(self)
 
         # Create an instance(object of the class Ship) of Ship after the screen has been created
         # argument self refers to current instance of AlienInvasion; gives Ship access to games resources, such as the screen object
@@ -208,6 +213,21 @@ class AlienInvasion:
         # creating the illusion of smooth movements 
         pygame.display.flip()
     
+    def _ship_hit(self):
+        """Respond to the ship being hit by an alien"""
+        # Decrement ships_left
+        self.stats.ships_left += 1
+
+        # Get rid of any remaining aliens and bullets
+        self.aliens.empty()
+        self.bullets.empty()
+
+        # Create a new fleet and center the ship
+        self._create_fleet()
+        self.ship.center_ship()
+
+        # Pause 
+        sleep(0.5)
 
 
 if __name__ == '__main__':
