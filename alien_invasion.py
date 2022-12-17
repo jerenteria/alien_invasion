@@ -198,7 +198,9 @@ class AlienInvasion:
     def _ship_hit(self):
         """Respond to the ship being hit by an alien"""
         # If the # of ships that are left is greater than 0 do the following and keep the game going
-        if self.stats.ships_left > 0 :
+        if self.stats.ships_left > 0:
+            # Decrement ships left
+            self.stats.ships_left -= 1
             # Get rid of any remaining aliens and bullets
             self.aliens.empty()
             self.bullets.empty()
