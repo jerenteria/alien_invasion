@@ -5,8 +5,8 @@ class GameStats:
         """Initialize statistics"""
         self.settings = ai_game.settings
         self.reset_stats()
-        # Start Alien Invasion in an active state; Start off the game True to keep game going
-        self.game_active = True
+        # Start Alien Invasion in an inactive state; Dont want to start game from launch we want to wait until player presses start
+        self.game_active = False
 
     def reset_stats(self):
         """Initialize statistics that can change during the game"""
