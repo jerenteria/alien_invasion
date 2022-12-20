@@ -6,6 +6,7 @@ from bullet import Bullet
 from alien import Alien
 from time import sleep
 from game_stats import GameStats
+from button import Button
 
 class AlienInvasion:
     # constructor class
@@ -32,6 +33,9 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
+
+        # Make the play button
+        self.play_button = Button(self, "Play")
 
         # set background color
         self.bg_color = (230, 230, 230)
@@ -62,6 +66,20 @@ class AlienInvasion:
                 self._check_keydown_events(event)  
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            # Check if the player clicks mouse on screen
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Get the position of x and y coordinates when mouse is being clicked
+                mouse_pos = pygame.mouse.get_pos()
+                # Send these values to the new method _check_play_button()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        """Start a new game when the player clicks play"""
+        # Use rect method collidepoint() to check whether the point of the mouse click overlaps the region defined by the
+            # Play button's rect
+        if self.play_button.rect.collidepoint(mouse_pos):
+            # If so set game_active to True and start the game 
+            self.stats.game_active = True
 
     # Respond to keypresses
     def _check_keydown_events(self, event):
@@ -239,6 +257,11 @@ class AlienInvasion:
         # when you call draw() on a group pygame draws each element in the group position defined by its rect attribute
         # draw() requires one argument: a surface to draw elements
         self.aliens.draw(self.screen)
+
+        # Draw the play button if the game is inactive
+        if not self.stats.game_active:
+            self.play_button.draw_button()
+
         # Make the most recently drawn screen visible
         # pygame.display.flip() continually updates display to show the new positions of game elements and hides the old ones
         # creating the illusion of smooth movements 
