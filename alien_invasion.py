@@ -78,8 +78,18 @@ class AlienInvasion:
         # Use rect method collidepoint() to check whether the point of the mouse click overlaps the region defined by the
             # Play button's rect
         if self.play_button.rect.collidepoint(mouse_pos):
+            # Reset the game stats
+            self.stats.reset_stats()
             # If so set game_active to True and start the game 
             self.stats.game_active = True
+
+            # Get rid of any remaining aliens and bullets
+            self.aliens.empty()
+            self.bullets.empty()
+
+            # Create a new fleet and center the ship
+            self._create_fleet()
+            self.ship.center_ship()
 
     # Respond to keypresses
     def _check_keydown_events(self, event):
