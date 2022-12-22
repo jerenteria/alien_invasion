@@ -77,7 +77,11 @@ class AlienInvasion:
         """Start a new game when the player clicks play"""
         # Use rect method collidepoint() to check whether the point of the mouse click overlaps the region defined by the
             # Play button's rect
-        if self.play_button.rect.collidepoint(mouse_pos):
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        # Only start the game if Play is clicked and the game is not currently active
+        if button_clicked and not self.stats.game_active:
+            # Reset the game settings after new start
+            self.settings.initialize_dynamic_settings()
             # Reset the game stats
             self.stats.reset_stats()
             # If so set game_active to True and start the game 
@@ -90,6 +94,9 @@ class AlienInvasion:
             # Create a new fleet and center the ship
             self._create_fleet()
             self.ship.center_ship()
+
+            # Hide the mouse cursor
+            pygame.mouse.set_visible(False)
 
     # Respond to keypresses
     def _check_keydown_events(self, event):
@@ -151,6 +158,8 @@ class AlienInvasion:
             self.bullets.empty()
             # Refill screen with new fleet of aliens
             self._create_fleet()
+            # Call increase_speed in settings.py to increase the speed everytime all the aliens have been shot down to lvl up!
+            self.settings.increase_speed()
 
     def _update_aliens(self):
         """Check if the fleet is at an edge then update the positions if all aliens in the fleet"""
@@ -240,6 +249,8 @@ class AlienInvasion:
         # Switch the game_active to False and end the game if player has ran out of ships
         else:
             self.stats.game_active = False
+            # Bring back mouse cursor when game ends
+            pygame.mouse.set_visible(True)
 
     def _check_aliens_bottom(self):
         """Check if any aliens have reached the bottom of the screen"""
