@@ -7,6 +7,7 @@ from alien import Alien
 from time import sleep
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 
 class AlienInvasion:
     # constructor class
@@ -24,6 +25,8 @@ class AlienInvasion:
 
         # Create an instance to store game statistics 
         self.stats = GameStats(self)
+        # Create an instance to create a scoreboard
+        self.sb = Scoreboard(self)
 
         # Create an instance(object of the class Ship) of Ship after the screen has been created
         # argument self refers to current instance of AlienInvasion; gives Ship access to games resources, such as the screen object
@@ -33,6 +36,7 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
+
 
         # Make the play button
         self.play_button = Button(self, "Play")
@@ -278,6 +282,9 @@ class AlienInvasion:
         # when you call draw() on a group pygame draws each element in the group position defined by its rect attribute
         # draw() requires one argument: a surface to draw elements
         self.aliens.draw(self.screen)
+
+        # Draw the score information
+        self.sb.show_score()
 
         # Draw the play button if the game is inactive
         if not self.stats.game_active:
