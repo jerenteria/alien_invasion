@@ -91,6 +91,8 @@ class AlienInvasion:
             # If so set game_active to True and start the game 
             self.stats.game_active = True
             self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
 
             # Get rid of any remaining aliens and bullets
             self.aliens.empty()
@@ -176,6 +178,10 @@ class AlienInvasion:
             self._create_fleet()
             # Call increase_speed in settings.py to increase the speed everytime all the aliens have been shot down to lvl up!
             self.settings.increase_speed()
+            # Increase level
+            self.stats.level += 1
+            self.sb.prep_level()
+
 
     def _update_aliens(self):
         """Check if the fleet is at an edge then update the positions if all aliens in the fleet"""
@@ -254,6 +260,8 @@ class AlienInvasion:
         if self.stats.ships_left > 0:
             # Decrement ships left
             self.stats.ships_left -= 1
+            # After removing a ship display the correct amount of remaining ships on the screen
+            self.sb.prep_ships()
             # Get rid of any remaining aliens and bullets
             self.aliens.empty()
             self.bullets.empty()

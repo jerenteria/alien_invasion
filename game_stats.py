@@ -15,3 +15,4 @@ class GameStats:
         self.ships_left = self.settings.ship_limit
         # Start the player with a score of 0
         self.score = 0
+        self.level = 1
