@@ -90,6 +90,7 @@ class AlienInvasion:
             self.stats.reset_stats()
             # If so set game_active to True and start the game 
             self.stats.game_active = True
+            self.sb.prep_score()
 
             # Get rid of any remaining aliens and bullets
             self.aliens.empty()
@@ -156,6 +157,17 @@ class AlienInvasion:
         # Check for any bullets that have hit aliens
         # If so, get rid of the bullet and the alien
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        
+        # Update score
+        if collisions:
+            # Loop through all the aliens(values in the dictionary)
+            for aliens in collisions.values():
+                # Set the score to be the amount of points * the amount of aliens hit
+                self.stats.score += self.settings.alien_points * len(aliens)
+                # Update the score
+            self.sb.prep_score()
+            # Everytime a alien is hit check the score to see if its higher than the current high score
+            self.sb.check_high_score()
         # check if aliens group is empty
         if not self.aliens:
             # If it is get rid of existing bullets using empty()
